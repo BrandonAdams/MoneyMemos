@@ -26,6 +26,7 @@
 		3F4CB29E191BB35500FC5510 /* addEntry.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4CB29B191BB35500FC5510 /* addEntry.png */; };
 		3F4CB29F191BB35500FC5510 /* addLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4CB29C191BB35500FC5510 /* addLocation.png */; };
 		3F4CB2A0191BB35500FC5510 /* blackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4CB29D191BB35500FC5510 /* blackBackground.png */; };
+		3F8E468C191C01CA00A7F2FD /* CreateLocationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		3F4CB29B191BB35500FC5510 /* addEntry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addEntry.png; path = MoneyMemos/addEntry.png; sourceTree = "<group>"; };
 		3F4CB29C191BB35500FC5510 /* addLocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addLocation.png; path = MoneyMemos/addLocation.png; sourceTree = "<group>"; };
 		3F4CB29D191BB35500FC5510 /* blackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blackBackground.png; path = MoneyMemos/blackBackground.png; sourceTree = "<group>"; };
+		3F8E468A191C01CA00A7F2FD /* CreateLocationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateLocationVC.h; path = MoneyMemos/CreateLocationVC.h; sourceTree = "<group>"; };
+		3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateLocationVC.m; path = MoneyMemos/CreateLocationVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +178,8 @@
 				3F4CB279191BB25C00FC5510 /* DetailViewController.m */,
 				3F4CB275191BB25C00FC5510 /* MasterViewController.h */,
 				3F4CB276191BB25C00FC5510 /* MasterViewController.m */,
+				3F8E468A191C01CA00A7F2FD /* CreateLocationVC.h */,
+				3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */,
 			);
 			name = VC;
 			path = ..;
@@ -301,6 +306,7 @@
 				3F4CB277191BB25C00FC5510 /* MasterViewController.m in Sources */,
 				3F4CB26A191BB25C00FC5510 /* main.m in Sources */,
 				3F4CB27A191BB25C00FC5510 /* DetailViewController.m in Sources */,
+				3F8E468C191C01CA00A7F2FD /* CreateLocationVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +525,7 @@
 				3F4CB294191BB25C00FC5510 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3F4CB295191BB25C00FC5510 /* Build configuration list for PBXNativeTarget "MoneyMemosTests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +534,7 @@
 				3F4CB297191BB25C00FC5510 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -13,5 +13,7 @@
 @interface MasterViewController : UITableViewController
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *addLocation;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editLocation;
 
 @end
