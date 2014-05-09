@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CreateLocationVC : UIViewController
+@class MasterViewController;
+
+@interface CreateLocationVC : UIViewController<UITextFieldDelegate>
+
+@property (strong, nonatomic) MasterViewController *masterViewController;
+
+@property (strong, nonatomic) IBOutlet UITextField *locationField;
+@property (strong, nonatomic) IBOutlet UITextField *zipField;
+@property (strong, nonatomic) NSString *location;
+@property (strong, nonatomic) NSString *zip;
+
 
 @end

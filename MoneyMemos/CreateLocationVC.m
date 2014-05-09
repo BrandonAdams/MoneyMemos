@@ -7,10 +7,12 @@
 //
 
 #import "CreateLocationVC.h"
+#import "MasterViewController.h"
 
 @interface CreateLocationVC ()
 @property (strong, nonatomic) IBOutlet UIButton *cancel;
 @property (strong, nonatomic) IBOutlet UIButton *createLocation;
+
 
 @end
 
@@ -28,6 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.masterViewController = (MasterViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"masterController"];
+    
+    
 	// Do any additional setup after loading the view.
 }
 
@@ -49,8 +55,13 @@
     [self returnToLocations];
 }
 
-- (IBAction)selectState:(id)sender {
-    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"selectState"];
-    
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    self.location = self.locationField.text;
+    self.zip = self.zipField.text;
+    NSLog(@"%@, %@", _zip, _location);
+    [self.locationField resignFirstResponder];
+    [self.zipField resignFirstResponder];
+    return YES;
 }
+
 @end

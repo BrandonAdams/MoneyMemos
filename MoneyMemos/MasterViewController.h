@@ -15,5 +15,6 @@
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *addLocation;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editLocation;
+@property (strong, nonatomic) NSMutableArray *listOfLocations;
 
 @end
