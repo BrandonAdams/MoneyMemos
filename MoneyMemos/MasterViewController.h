@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataStore.h"
+
 
 @class DetailViewController;
 

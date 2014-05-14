@@ -7,11 +7,13 @@
 //
 
 #import "MasterViewController.h"
-
+#import "Location.h"
 #import "DetailViewController.h"
+#import "CreateLocationVC.h"
 
 @interface MasterViewController () {
     NSMutableArray *_objects;
+    Location *_loc;
 }
 @end
 
@@ -44,6 +46,9 @@
      [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
      **/
     
+    //register for kNotificationGameDidEnd and notification
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleNotificationLocationCreation:) name:kNotificationCreatedLocation object:_loc];
+    _listOfLocations = [[NSMutableArray alloc] init];
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,6 +56,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 /**
  Create a new location list 
@@ -71,6 +78,27 @@
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
+#pragma mark - Notifications
+- (void) handleNotificationLocationCreation:(NSNotification *)notification
+{
+    NSLog(@"MASTER RECIEVED A NOTIFICATION");
+    //get the information that was sent by the notification
+    NSDictionary *userInfo = notification.userInfo;
+    //create a location object and intialize it with our passed in dictionary
+    _loc = [[Location alloc] initWithDictionary:userInfo];
+    //insert our object into our array of locations and put it into the tableview for the user to see
+    [_listOfLocations addObject:_loc];
+    [self updateSharedStore];
+    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+}
+
+-(void)updateSharedStore{
+    [DataStore sharedStore].allItems = _listOfLocations;
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -80,15 +108,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count;
+    return [DataStore sharedStore].allItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    //NSDate *object = _objects[indexPath.row];
+    //cell.textLabel.text = [object description];
+    
+    Location *tempLoc = [DataStore sharedStore].allItems[indexPath.row];
+    NSLog(@"Location  name is %@", tempLoc.name);
+    cell.textLabel.text = [tempLoc name];
+   
+    
     return cell;
 }
 

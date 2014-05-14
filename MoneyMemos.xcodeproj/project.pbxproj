@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F46808B1923C31C00889F3C /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F46808A1923C31C00889F3C /* Location.m */; };
+		3F46808C1923C31C00889F3C /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F46808A1923C31C00889F3C /* Location.m */; };
+		3F46808F1923E58200889F3C /* DataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F46808E1923E58200889F3C /* DataStore.m */; };
+		3F4680901923E58200889F3C /* DataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F46808E1923E58200889F3C /* DataStore.m */; };
 		3F4CB25E191BB25C00FC5510 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CB25D191BB25C00FC5510 /* Foundation.framework */; };
 		3F4CB260191BB25C00FC5510 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CB25F191BB25C00FC5510 /* CoreGraphics.framework */; };
 		3F4CB262191BB25C00FC5510 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4CB261191BB25C00FC5510 /* UIKit.framework */; };
@@ -38,6 +42,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F4680891923C31C00889F3C /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Location.h; path = MoneyMemos/Location.h; sourceTree = "<group>"; };
+		3F46808A1923C31C00889F3C /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Location.m; path = MoneyMemos/Location.m; sourceTree = "<group>"; };
+		3F46808D1923E58200889F3C /* DataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataStore.h; path = MoneyMemos/DataStore.h; sourceTree = "<group>"; };
+		3F46808E1923E58200889F3C /* DataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataStore.m; path = MoneyMemos/DataStore.m; sourceTree = "<group>"; };
 		3F4CB25A191BB25C00FC5510 /* MoneyMemos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyMemos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F4CB25D191BB25C00FC5510 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3F4CB25F191BB25C00FC5510 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -190,6 +198,10 @@
 		3F4CB29A191BB28900FC5510 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3F46808D1923E58200889F3C /* DataStore.h */,
+				3F46808E1923E58200889F3C /* DataStore.m */,
+				3F4680891923C31C00889F3C /* Location.h */,
+				3F46808A1923C31C00889F3C /* Location.m */,
 			);
 			name = Model;
 			path = ..;
@@ -294,10 +306,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F46808F1923E58200889F3C /* DataStore.m in Sources */,
 				3F4CB26E191BB25C00FC5510 /* AppDelegate.m in Sources */,
 				3F4CB277191BB25C00FC5510 /* MasterViewController.m in Sources */,
 				3F4CB26A191BB25C00FC5510 /* main.m in Sources */,
 				3F4CB27A191BB25C00FC5510 /* DetailViewController.m in Sources */,
+				3F46808B1923C31C00889F3C /* Location.m in Sources */,
 				3F8E468C191C01CA00A7F2FD /* CreateLocationVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,7 +320,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F46808C1923C31C00889F3C /* Location.m in Sources */,
 				3F4CB28F191BB25C00FC5510 /* MoneyMemosTests.m in Sources */,
+				3F4680901923E58200889F3C /* DataStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

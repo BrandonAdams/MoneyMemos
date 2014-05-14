@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static NSString *kNotificationCreatedLocation = @"kNotificationCreatedLocation";
+
 @class MasterViewController;
 
 @interface CreateLocationVC : UIViewController<UITextFieldDelegate>
