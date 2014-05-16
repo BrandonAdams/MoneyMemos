@@ -19,4 +19,6 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editLocation;
 @property (strong, nonatomic) NSMutableArray *listOfLocations;
 
+-(void)saveTasks;
+
 @end

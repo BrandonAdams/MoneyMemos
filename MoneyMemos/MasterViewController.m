@@ -30,25 +30,28 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    //loading our saved locations here or creating an empty one
+    NSArray *plist = [NSArray arrayWithContentsOfFile:[self docPath]];
+    if (plist) {
+        // If there was a dataset available, copy it into our instance variable.
+        
+        _listOfLocations = [plist mutableCopy];
+    } else {
+        // Otherwise, just create an empty one to get us started.
+        _listOfLocations = [[NSMutableArray alloc] init];
+    }
     
+    [super viewDidLoad];
+    
+	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
-    /**
-     Need to load all saved locations here
-     
-     [_objects insertObject:[NSDate date] atIndex:0];
-     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-     **/
-    
     //register for kNotificationGameDidEnd and notification
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleNotificationLocationCreation:) name:kNotificationCreatedLocation object:_loc];
-    _listOfLocations = [[NSMutableArray alloc] init];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleNotificationLocationCreation:) name:kNotificationCreatedLocation object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -135,19 +138,24 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:indexPath.row];
+        [_listOfLocations removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self updateSharedStore];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
 }
 
-/*
+
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    NSString *selectedLocation = [_listOfLocations objectAtIndex:fromIndexPath.row];
+    [_listOfLocations removeObject: selectedLocation];
+    [_listOfLocations insertObject:selectedLocation atIndex:toIndexPath.row];
+    [self updateSharedStore];
 }
-*/
+
 
 /*
 // Override to support conditional rearranging of the table view.
@@ -160,10 +168,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        NSDate *object = _objects[indexPath.row];
-        self.detailViewController.detailItem = object;
-    }
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -173,6 +178,24 @@
         NSDate *object = _objects[indexPath.row];
         [[segue destinationViewController] setDetailItem:object];
     }
+}
+
+#pragma mark - Helper methods
+// Helper function to fetch the path to our to-do data stored on disk
+- (NSString*) docPath{
+    //NSArray *pathList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //return [[pathList objectAtIndex:0] stringByAppendingPathComponent:@"money-memos-data.plist"];
+    NSString *path = [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath],@"money-memos-data.plist"];
+    return path;
+}
+
+// array - writeToFile saves a
+- (void)saveTasks{
+    if ([DataStore sharedStore].allItems) {
+        [[DataStore sharedStore].allItems writeToFile: [self docPath] atomically:YES];
+        
+    }
+    //[[DataStore sharedStore].allItems writeToFile: [self docPath] atomically:YES];
 }
 
 @end
