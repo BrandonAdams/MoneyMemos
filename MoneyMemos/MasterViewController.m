@@ -10,9 +10,15 @@
 #import "Location.h"
 #import "DetailViewController.h"
 #import "CreateLocationVC.h"
+#import "TaxInformation.h"
+
+NSString * ZIP_TAX_URL = @"http://api.zip-tax.com/request/v20?key=";
+NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
+
 
 @interface MasterViewController () {
-    NSMutableArray *_objects;
+    NSMutableArray *_data;
+    NSURLSession *_session;
     Location *_loc;
 }
 @end
@@ -67,16 +73,11 @@
  **/
 - (void)insertNewObject:(id)sender
 {
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
-    }
+    
     
 }
+
 - (IBAction)insertNewLocation:(id)sender {
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
-    }
-    [_objects insertObject:[NSDate date] atIndex:0];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -92,9 +93,6 @@
     //insert our object into our array of locations and put it into the tableview for the user to see
     [_listOfLocations addObject:_loc];
     [self updateSharedStore];
-    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    
 }
 
 -(void)updateSharedStore{
@@ -117,14 +115,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-
-    //NSDate *object = _objects[indexPath.row];
-    //cell.textLabel.text = [object description];
-    
     Location *tempLoc = [DataStore sharedStore].allItems[indexPath.row];
     NSLog(@"Location  name is %@", tempLoc.name);
     cell.textLabel.text = [tempLoc name];
-   
     
     return cell;
 }
@@ -175,18 +168,16 @@
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
     }
 }
 
 #pragma mark - Helper methods
 // Helper function to fetch the path to our to-do data stored on disk
 - (NSString*) docPath{
-    //NSArray *pathList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //return [[pathList objectAtIndex:0] stringByAppendingPathComponent:@"money-memos-data.plist"];
-    NSString *path = [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath],@"money-memos-data.plist"];
-    return path;
+    NSArray *pathList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    return [[pathList objectAtIndex:0] stringByAppendingPathComponent:@"money-memos-data.plist"];
+    //NSString *path = [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath],@"money-memos-data.plist"];
+    //return path;
 }
 
 // array - writeToFile saves a
@@ -196,6 +187,88 @@
         
     }
     //[[DataStore sharedStore].allItems writeToFile: [self docPath] atomically:YES];
+}
+
+- (void)loadData:(NSString *)zipcode
+{
+    
+    // 1 - NSURLSession is a class used to download data via HTTP
+    
+    // 2 - ephemeralSessionConfiguration means
+    // we don't need to cache anything
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    // 3 - create a new NSURLSession
+    _session = [NSURLSession sessionWithConfiguration:config];
+    
+    // 4- show the activity indicator in upper-left of screen
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    NSMutableString *searchString = [NSMutableString string];
+    [searchString appendString: ZIP_TAX_URL];
+    [searchString appendString:ZIP_TAX_API_KEY];
+    [searchString appendString:@"&postalcode="];
+    [searchString appendString:zipcode];
+    
+    NSLog(@"Searching for %@", searchString);
+    
+    NSURL *url = [NSURL URLWithString:searchString];
+    
+    // 6 - this is a data task where we request a resource
+    NSURLSessionDataTask *dataTask =
+    [_session dataTaskWithURL:url
+     
+     // begin completion handler - this is called when we get the data
+     // Gah!
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                if (!error) {
+                    NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+                    // 7 - HTTP status code 200 is OK
+                    if (httpResp.statusCode == 200) {
+                        
+                        NSError *jsonError;
+                        // 8 - convert loaded string to JSON
+                        NSDictionary *json =
+                        [NSJSONSerialization JSONObjectWithData:data
+                                                        options:NSJSONReadingMutableLeaves
+                                                          error:&jsonError];
+                        
+                        
+                        if (!jsonError) {
+                            // 9 - finally start parsing - get array of concerts (dictionaries)
+                            NSArray *zipTaxResponse = json[@"results"];
+                            NSMutableArray *tempArray = [NSMutableArray array];
+                            
+                            // 10 - loop through dictionaries and create Concert objects
+                            for (NSDictionary *d in zipTaxResponse) {
+                                TaxInformation *ti = [[TaxInformation alloc] initWithDictionary:d];
+                                [tempArray addObject: ti];
+                            }
+                            
+                            
+                            // 11 - update table and hide activity indicator
+                            // Why dispatch_async()?
+                            // Whenever you’re dealing with asynchronous network calls, you have to make
+                            // sure to update UIKit on the main thread.
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                                _data = tempArray;
+                            });
+                            
+                        } // end if (!jsonError)
+                    } // end if (httpResp.statusCode == 200)
+                } // end if (!error)
+            } // end completion handler
+     ]; // end method call
+    
+    
+    // 12 - starts (or resumes) the data task
+    [dataTask resume];
+    
+    
 }
 
 @end
