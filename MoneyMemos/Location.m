@@ -15,6 +15,7 @@
     if (self) {
         self.name = dictionary[@"name"] ?  dictionary[@"name"] : @"New Location";
         self.zip = dictionary[@"zip"] ? [dictionary[@"zip"]intValue] : -1;
+        self.entries = [NSMutableArray array];
     }
     
     return self;

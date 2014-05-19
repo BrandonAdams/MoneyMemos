@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Location.h"
+
+static NSString *kNotificationSetDetailLocation = @"kNotificationSetDetailLocation";
 
 @interface DetailViewController : UIViewController <UISplitViewControllerDelegate>
 
@@ -16,4 +19,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *expenses;
 @property (weak, nonatomic) IBOutlet UILabel *taxAllocated;
 @property (weak, nonatomic) IBOutlet UILabel *expenseTotal;
+
+@property (nonatomic) Location *currentLocation;
+
+-(void)updateTextFields;
+
 @end

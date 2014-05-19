@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Location.h"
 
 @interface DataStore : NSObject
 
 @property (nonatomic) NSMutableArray *allItems;
+@property (nonatomic) Location *currentLocation;
 
 +(instancetype)sharedStore;
 

@@ -19,6 +19,19 @@
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
     }
+    /*
+    UIStoryboard *storybord = [UIStoryboard storyboardWithName:@"masterController" bundle:nil];
+    UIViewController *vc =[storybord instantiateInitialViewController];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"name.png"]];
+    
+    [vc.view addSubview:imageView];
+    [vc.view bringSubviewToFront:imageView];
+    
+    [self.window makeKeyAndVisible];
+    
+    [UIView transitionWithView:self.window duration:1.0f options:UIViewAnimationOptionTransitionNone animations:^(void){imageView.alpha = 0.0f;} completion:^(BOOL finished){[imageView removeFromSuperview];}];
+    */
     return YES;
 }
 							

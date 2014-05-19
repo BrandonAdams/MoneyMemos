@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
+#import "Location.h"
 
 
 @class DetailViewController;
@@ -18,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *addLocation;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editLocation;
 @property (strong, nonatomic) NSMutableArray *listOfLocations;
+
+@property (nonatomic) Location *currentLocation;
 
 -(void)saveTasks;
 

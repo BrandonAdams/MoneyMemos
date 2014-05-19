@@ -10,7 +10,8 @@
 
 @implementation DataStore
 
-+ (id)sharedStore{
++ (id)sharedStore
+{
     static DataStore *sharedStore = nil;
     
     //Do I need to create a sharedStore?

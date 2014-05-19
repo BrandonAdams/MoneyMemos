@@ -7,10 +7,11 @@
 //
 
 #import "MasterViewController.h"
-#import "Location.h"
 #import "DetailViewController.h"
 #import "CreateLocationVC.h"
+#import "CreateEntryVC.h"
 #import "TaxInformation.h"
+#import "Entry.h"
 
 NSString * ZIP_TAX_URL = @"http://api.zip-tax.com/request/v20?key=";
 NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
@@ -20,6 +21,7 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
     NSMutableArray *_data;
     NSURLSession *_session;
     Location *_loc;
+    BOOL _validZip;
 }
 @end
 
@@ -49,14 +51,21 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
     
     [super viewDidLoad];
     
+        
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
-    self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    //self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+     self.detailViewController = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"detailController"];
+    
+    
     
     //register for kNotificationGameDidEnd and notification
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleNotificationLocationCreation:) name:kNotificationCreatedLocation object:nil];
+    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleNotificationEntryCreation:) name:kNotificationCreatedEntry object:nil];
+ 
+    
     
 }
 
@@ -90,14 +99,42 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
     NSDictionary *userInfo = notification.userInfo;
     //create a location object and intialize it with our passed in dictionary
     _loc = [[Location alloc] initWithDictionary:userInfo];
+    [self loadData:[NSString stringWithFormat:@"%d",_loc.zip]];
+    
     //insert our object into our array of locations and put it into the tableview for the user to see
     [_listOfLocations addObject:_loc];
     [self updateSharedStore];
 }
+/*
+- (void) handleNotificationEntryCreation:(NSNotification *)notification
+{
+    NSLog(@"MASTER RECIEVED AN ENTRY NOTIFICATION");
+    //get the information that was sent by the notification
+    NSDictionary *userInfo = notification.userInfo;
+    
+    Entry *entry = [[Entry alloc] initWithDictionary:userInfo];
+    
+    [_currentLocation.entries addObject:entry];
+    
+    [self updateSharedStore];
+}*/
+
 
 -(void)updateSharedStore{
     [DataStore sharedStore].allItems = _listOfLocations;
     [self.tableView reloadData];
+}
+
+-(void)setLocationSalesTax{
+    if (_validZip) {
+        TaxInformation *ti = _data[0];
+        _loc.tax = ti.taxSales;
+        NSLog(@"SALES TAX IS: %f", _loc.tax);
+    }
+    else{
+        _loc.zip = -1;
+        NSLog(@"NO TAX IMPLEMENTED");
+    }
 }
 
 #pragma mark - Table View
@@ -117,8 +154,8 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     Location *tempLoc = [DataStore sharedStore].allItems[indexPath.row];
     NSLog(@"Location  name is %@", tempLoc.name);
-    cell.textLabel.text = [tempLoc name];
-    
+    //cell.textLabel.text = [tempLoc name];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@: %lu", [tempLoc name], (unsigned long)tempLoc.entries.count];
     return cell;
 }
 
@@ -161,13 +198,28 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Location *tempLoc = [DataStore sharedStore].allItems[indexPath.row];
+    self.detailViewController.locationName.text = tempLoc.name;
     
+    //CHEAP BEAUTIFUL WAY
+    [DataStore sharedStore].currentLocation = _currentLocation;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showDetail"])
+    {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        //Location *selectedLocation = [[DataStore sharedStore].allItems objectAtIndex:indexPath.row];
+        _currentLocation = [[DataStore sharedStore].allItems objectAtIndex:indexPath.row];
+        
+        //self.detailViewController.currentLocation = [[DataStore sharedStore].allItems objectAtIndex:indexPath.row];
+        //self.detailViewController.currentLocation = selectedLocation;
+        //NSLog(@"showDetail at indexPath.row: %ld", (long)indexPath.row);
+        //NSLog(@"self.detailViewController.currentLocation: %@", self.detailViewController.currentLocation);
+        //NSLog(@"selectedLocation: %@", selectedLocation);
+        //NSLog(@"[[DataStore sharedStore].allItems objectAtIndex:indexPath.row]: %@", [[DataStore sharedStore].allItems objectAtIndex:indexPath.row]);
+        //[indexPath];
     }
 }
 
@@ -236,28 +288,31 @@ NSString * ZIP_TAX_API_KEY = @"UD7FAV2";
                                                         options:NSJSONReadingMutableLeaves
                                                           error:&jsonError];
                         
-                        
                         if (!jsonError) {
                             // 9 - finally start parsing - get array of concerts (dictionaries)
-                            NSArray *zipTaxResponse = json[@"results"];
-                            NSMutableArray *tempArray = [NSMutableArray array];
-                            
-                            // 10 - loop through dictionaries and create Concert objects
-                            for (NSDictionary *d in zipTaxResponse) {
-                                TaxInformation *ti = [[TaxInformation alloc] initWithDictionary:d];
-                                [tempArray addObject: ti];
-                            }
-                            
-                            
-                            // 11 - update table and hide activity indicator
-                            // Why dispatch_async()?
-                            // Whenever you’re dealing with asynchronous network calls, you have to make
-                            // sure to update UIKit on the main thread.
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                            /*****  CHECK FOR CORRECT rCode SIGNATURE HERE  *******/
+                            int rCode = [json[@"rCode"]intValue];
+                            NSLog(@"rCode = %d",rCode);
+                            if (rCode == 100)
+                            {
+                                _validZip = YES;
+                                NSArray *zipTaxResponse = json[@"results"];
+                                NSMutableArray *tempArray = [NSMutableArray array];
+                                
+                                // 10 - loop through dictionaries and create Concert objects
+                                for (NSDictionary *d in zipTaxResponse) {
+                                    TaxInformation *ti = [[TaxInformation alloc] initWithDictionary:d];
+                                    [tempArray addObject: ti];
+                                }
                                 _data = tempArray;
-                            });
-                            
+                                if (_data.count == 0) {
+                                    _validZip = NO;
+                                }
+                            }
+                            else{
+                                _validZip = NO;
+                            }
+                            [self setLocationSalesTax];
                         } // end if (!jsonError)
                     } // end if (httpResp.statusCode == 200)
                 } // end if (!error)

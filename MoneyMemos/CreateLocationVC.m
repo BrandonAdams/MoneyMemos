@@ -34,7 +34,7 @@
     self.masterViewController = (MasterViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"masterController"];
     
     
-	// Do any additional setup after loading the view.
+	// Do any additional setup after loading the view.0
 }
 
 - (void)didReceiveMemoryWarning

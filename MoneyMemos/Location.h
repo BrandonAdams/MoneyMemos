@@ -12,9 +12,13 @@
 
 @property (copy, nonatomic) NSString *name;
 @property (nonatomic) int zip;
+@property (nonatomic) float tax;
+
+@property (strong, nonatomic) NSMutableArray *entries;
 
 -(id)initWithDictionary:(NSDictionary *)dictionary;
 -(int)locationZip;
 -(NSString *)locationName;
+
 
 @end

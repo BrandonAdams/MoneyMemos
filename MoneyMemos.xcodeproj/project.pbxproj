@@ -30,6 +30,9 @@
 		3F4CB2A0191BB35500FC5510 /* blackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4CB29D191BB35500FC5510 /* blackBackground.png */; };
 		3F8E468C191C01CA00A7F2FD /* CreateLocationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */; };
 		3FE5F7E61927D4FE002BBAD6 /* TaxInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE5F7E51927D4FE002BBAD6 /* TaxInformation.m */; };
+		3FEDCD1619294804002B316A /* CreateEntryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDCD1519294804002B316A /* CreateEntryVC.m */; };
+		3FEDCD1919294DB2002B316A /* Entry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDCD1819294DB2002B316A /* Entry.m */; };
+		3FEDCD1C19295055002B316A /* EntriesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDCD1B19295055002B316A /* EntriesVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +77,12 @@
 		3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateLocationVC.m; path = MoneyMemos/CreateLocationVC.m; sourceTree = "<group>"; };
 		3FE5F7E41927D4FE002BBAD6 /* TaxInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaxInformation.h; path = MoneyMemos/TaxInformation.h; sourceTree = "<group>"; };
 		3FE5F7E51927D4FE002BBAD6 /* TaxInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaxInformation.m; path = MoneyMemos/TaxInformation.m; sourceTree = "<group>"; };
+		3FEDCD1419294804002B316A /* CreateEntryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateEntryVC.h; path = MoneyMemos/CreateEntryVC.h; sourceTree = "<group>"; };
+		3FEDCD1519294804002B316A /* CreateEntryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateEntryVC.m; path = MoneyMemos/CreateEntryVC.m; sourceTree = "<group>"; };
+		3FEDCD1719294DB2002B316A /* Entry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entry.h; sourceTree = "<group>"; };
+		3FEDCD1819294DB2002B316A /* Entry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entry.m; sourceTree = "<group>"; };
+		3FEDCD1A19295055002B316A /* EntriesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntriesVC.h; path = MoneyMemos/EntriesVC.h; sourceTree = "<group>"; };
+		3FEDCD1B19295055002B316A /* EntriesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntriesVC.m; path = MoneyMemos/EntriesVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +193,10 @@
 				3F4CB276191BB25C00FC5510 /* MasterViewController.m */,
 				3F8E468A191C01CA00A7F2FD /* CreateLocationVC.h */,
 				3F8E468B191C01CA00A7F2FD /* CreateLocationVC.m */,
+				3FEDCD1419294804002B316A /* CreateEntryVC.h */,
+				3FEDCD1519294804002B316A /* CreateEntryVC.m */,
+				3FEDCD1A19295055002B316A /* EntriesVC.h */,
+				3FEDCD1B19295055002B316A /* EntriesVC.m */,
 			);
 			name = VC;
 			path = ..;
@@ -207,6 +220,8 @@
 				3F46808E1923E58200889F3C /* DataStore.m */,
 				3F4680891923C31C00889F3C /* Location.h */,
 				3F46808A1923C31C00889F3C /* Location.m */,
+				3FEDCD1719294DB2002B316A /* Entry.h */,
+				3FEDCD1819294DB2002B316A /* Entry.m */,
 			);
 			name = Model;
 			path = ..;
@@ -314,8 +329,11 @@
 				3F46808F1923E58200889F3C /* DataStore.m in Sources */,
 				3F4CB26E191BB25C00FC5510 /* AppDelegate.m in Sources */,
 				3F4CB277191BB25C00FC5510 /* MasterViewController.m in Sources */,
+				3FEDCD1C19295055002B316A /* EntriesVC.m in Sources */,
+				3FEDCD1619294804002B316A /* CreateEntryVC.m in Sources */,
 				3F4CB26A191BB25C00FC5510 /* main.m in Sources */,
 				3F4CB27A191BB25C00FC5510 /* DetailViewController.m in Sources */,
+				3FEDCD1919294DB2002B316A /* Entry.m in Sources */,
 				3F46808B1923C31C00889F3C /* Location.m in Sources */,
 				3FE5F7E61927D4FE002BBAD6 /* TaxInformation.m in Sources */,
 				3F8E468C191C01CA00A7F2FD /* CreateLocationVC.m in Sources */,

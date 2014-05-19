@@ -20,7 +20,7 @@
         self.taxSales = [dictionary[@"taxSales"]floatValue];
         self.stateSalesTax = [dictionary[@"stateSalesTax"]floatValue];
     }
-    
+    NSLog(@"TAX SALES IS EQUAL TO: %f", self.taxSales);
     return self;
 }
 
